@@ -9,6 +9,8 @@ Then beautiful games like "is your pepper long" that increased the size of your 
 
 Then a watch face which represented hours from birth.
 
+Then DF and CDDA, and SS13.
+
 Then system dynamics that represented human behaviour as liquid dynamics, https://github.com/fetsorn/elm-system-dynamics.
 
 Applicative and monoid behaviour around us, category theory
