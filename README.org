@@ -1,0 +1,45 @@
+#+title: Everlay
+
+* inspirations
+First in plain text metaphors in poems. A falling apple is a falling knowledge is a crushing meteorite is an elevator.
+
+Then a Nokia game that overlayed monsters over phone camera such that you could shoot them when you saw them in the room.
+
+Then beautiful games like "is your pepper long" that increased the size of your pepper based on some activity like clicking or liking.
+
+Then a watch face which represented hours from birth.
+
+Then system dynamics that represented human behaviour as liquid dynamics, https://github.com/fetsorn/elm-system-dynamics.
+
+Applicative and monoid behaviour around us, category theory
+
+Then the blockchains, complex behavior open for public analysis, overlay blockchain games
+
+Contemplation of novel compsci application leads back to it
+* models to model
+- sephiroth tree
+- five buddhism
+- system dynamics
+* example
+A gnome that fights with other gnomes based on operations of transfer and trait of Even/Odd.
+
+Let's say there's addition, subtraction and identification
+
+So generate a custom gnome face from identification
+
+And they turn evil if their number is odd
+
+And good if their number is even
+
+And each time there is transfer between two gnomes, they can either switch sides or stay
+
+And if they both stay in one camp afterwards we say that they are agreeing
+
+And if they both switched sides we say they fought
+
+
+This is a kind of overlay for sure, and yet it doesnt' make apparent the composability.
+
+Provide a toolchain, a constructor UI that lets people set traits to features and see the outcome.
+
+User picks overlays "gnome" and "fight", and sets them to devices, and show blockchain activity as that.
