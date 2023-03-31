@@ -47,12 +47,20 @@ Provide a toolchain, a constructor UI that lets people set traits to features an
 User picks overlays "gnome" and "fight", and sets them to devices, and show public activity as that.
 
 
-under the hood there's toolchain for matching all monoid devices to monoid overlays
+Under the hood there's toolchain for matching all monoid devices to monoid overlays
 
-automated market maker trade operation implements addition, overlay of growing tree implements addition
+Automated market maker trade operation implements addition, overlay of growing tree implements addition
 
-connect some overlay to automated market maker
+Connect some overlay to automated market maker
 
-and see trade as gnome wars, or as fish swimming in sea, or as trees growing
+And see trade as gnome wars, or as fish swimming in sea, or as trees growing
 
-and see a forest instead of explorer transactions
+And see a forest instead of explorer transactions
+
+
+Program an addition device, plug it to some source, plug it to some overlay, and a tree would grow on the server when some public API values change
+
+
+A simulation is where device logic is implemented by an expression instead of connecting to a public API source
+
+Before connecting to API that implmenents addition and subtraction over time, and trying to display fibonacci retracement levels, implement a device with a fibonacci sequence and test overlays against that simulation
