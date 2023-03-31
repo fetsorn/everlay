@@ -3,25 +3,25 @@
 * inspirations
 First in plain text metaphors in poems. A falling apple is a falling knowledge is a crushing meteorite is an elevator.
 
-Then a Nokia game that overlayed monsters over phone camera such that you could shoot them when you saw them in the room.
+Then a mobile game that overlayed monsters over phone camera such that you could shoot them when you saw them in the room.
 
 Then beautiful games like "is your pepper long" that increased the size of your pepper based on some activity like clicking or liking.
 
 Then a watch face which represented hours from birth.
 
-Then DF and CDDA, and SS13.
+Then 2D games with detailed simulation, multiplayer agency and emergent gameplay.
 
-Then system dynamics that represented human behaviour as liquid dynamics, https://github.com/fetsorn/elm-system-dynamics.
+Then simulators that represented human market behaviour as system (liquid) dynamics.
 
 Applicative and monoid behaviour around us, category theory
 
-Then the blockchains, complex behavior open for public analysis, overlay blockchain games
+Then the distributed system, complex behavior open for public analysis, games as overlays over public distributed systems
 
 Contemplation of novel compsci application leads back to it
 * models to model
 - sephiroth tree
 - five buddhism
-- system dynamics
+- vera & mera
 * example
 A gnome that fights with other gnomes based on operations of transfer and trait of Even/Odd.
 
@@ -44,4 +44,15 @@ This is a kind of overlay for sure, and yet it doesnt' make apparent the composa
 
 Provide a toolchain, a constructor UI that lets people set traits to features and see the outcome.
 
-User picks overlays "gnome" and "fight", and sets them to devices, and show blockchain activity as that.
+User picks overlays "gnome" and "fight", and sets them to devices, and show public activity as that.
+
+
+under the hood there's toolchain for matching all monoid devices to monoid overlays
+
+automated market maker trade operation implements addition, overlay of growing tree implements addition
+
+connect some overlay to automated market maker
+
+and see trade as gnome wars, or as fish swimming in sea, or as trees growing
+
+and see a forest instead of explorer transactions
