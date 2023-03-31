@@ -15,6 +15,8 @@ Then simulators that represented human market behaviour as system (liquid) dynam
 
 Applicative and monoid behaviour around us, category theory
 
+Platforms for collaborative dashboards and analytics of distributed systems.
+
 Then the distributed system, complex behavior open for public analysis, games as overlays over public distributed systems
 
 Contemplation of novel compsci application leads back to it
