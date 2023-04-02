@@ -1,5 +1,8 @@
 #+title: Everlay
 
+[[./assets/20230401-restaurants.jpg][Screenshot of simulation running in the logs]]
+
+
 * inspirations
 First in plain text metaphors in poems. A falling apple is a falling knowledge is a crushing meteorite is an elevator.
 
