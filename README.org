@@ -69,3 +69,33 @@ Program an addition device, plug it to some source, plug it to some overlay, and
 A simulation is where device logic is implemented by an expression instead of connecting to a public API source
 
 Before connecting to API that implmenents addition and subtraction over time, and trying to display fibonacci retracement levels, implement a device with a fibonacci sequence and test overlays against that simulation
+
+* new
+A wasm module that implements various traits for data.
+One can give the device a string, and device will tell you if the string is even or odd.
+Or one can give the device a number and the device will tell you its color.
+Device layer is a bunch of wasm modules that transform data
+Source layer handles input
+Overlay layer handles visual output
+As long as an overlay implements the same traits, it could be switched for another.
+The matching between source, device and overlay APIs can happen manually, or with naive algos, or with code generation, or with a CNN.
+One wouldn't fit each overlay representation to each device or source outlet by hand, everlay would find matches like a magnet.
+
+After there are clients it's a platform where you can develop new parts, assemble the parts, and if you are a product team - integrate an overlay to gamify your economy.
+
+* case clock
+the clock gives a wrapping integer as a stream. A device which can turn integers into strings, colors. An overlay that calls trait methods from the device to show something on a webpage. Overlay changes color of html page according to color-coding of hours, in order, every minute.
+confusion, perplexion, wonderment, brink of cognitive complexity, flow
+
+wasm still has some issues with state management - usually we store data outside wasm
+
+
+The promise is about gamification through lateral thinking, alternative interaction, mockery of system rules
+competition, attention and respect are main values of everlay.
+Attention concerns, highlights, like your public account turns out to be a rare beast in the overlay.
+Identification is key for values of competition, attention and respect.
+Clock is without identity, so it confuses.
+As long as overlay has identity, it enlightens.
+For example a specific time zone, or personal hours from birth, if they wrap around meaningful color codes, and one can compare to another - there's already competition and attention.
+To achieve gamification and respect, we also add player input.
+There is a lot of identities and behaviours in the wild web, and we intend to show them all.
