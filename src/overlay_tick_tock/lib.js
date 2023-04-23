@@ -4,26 +4,32 @@
  * @param {Object} args - Callbacks from source
  * @returns {Object} - Interface of the device
  */
-export function Device(url, args) {
-  return WebAssembly.instantiateStreaming(
+export async function Device(url, args) {
+  const wasm = await WebAssembly.instantiateStreaming(
     fetch(url),
     { "env": args }
-  ).then((wasm) => wasm.instance.exports);
+  )
+
+  return wasm.instance.exports;
 }
 
 /**
  * Renders overlay in a loop
  */
-export async function refresh(source, device, overlay, callbacks) {
-  // initialize source with IO
-  const sourceAPI = await source();
+export async function refresh(connections, overlay, connectChart) {
+  // do magic with source and device
+  const callbacks = await connections.reduce(
+    async (acc, connection) => {
+      const chart = await acc;
 
-  // initialize device with a source
-  const deviceAPI = await device(callbacks(sourceAPI))
+      return connectChart(chart, await connection(chart))
+    },
+    Promise.resolve({})
+  );
 
   // set page html to the overlay of device
-  document.getElementById("view").innerHTML = overlay(callbacks(sourceAPI, deviceAPI))
+  document.getElementById("view").innerHTML = overlay(callbacks)
 
   // frame rate 60fps
-  setTimeout(() => refresh(source, device, overlay, callbacks), 33.33);
+  setTimeout(() => refresh(connections, overlay, connectChart), 33.33);
 }

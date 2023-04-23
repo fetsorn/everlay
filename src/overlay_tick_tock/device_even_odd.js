@@ -29,6 +29,6 @@ import { Device } from "./lib.js";
  * @param {deviceEvenOddCallbacks}
  * @returns {deviceEvenOddAPI}
  */
-export function DeviceEvenOdd(callbacks) {
+export async function DeviceEvenOdd(callbacks) {
   return Device("/device-even-odd.wasm", callbacks)
 }

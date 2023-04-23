@@ -3,11 +3,14 @@ import { DeviceEvenOdd } from "./device_even_odd.js";
 import { OverlayTickTock } from "./overlay_tick_tock.js";
 import { refresh } from "./lib.js";
 
-function callbacks(sourceAPI, deviceAPI) {
+function connectChart(chart, connection) {
+  const inputs = { ...connection, ...chart };
+
   return {
-    num: sourceAPI.now,
-    trueFalse: deviceAPI?.isEven
+    ...inputs,
+    num: inputs.now,
+    trueFalse: inputs.isEven
   }
 }
 
-refresh(SourceTime, DeviceEvenOdd, OverlayTickTock, callbacks)
+refresh([SourceTime, DeviceEvenOdd], OverlayTickTock, connectChart)
