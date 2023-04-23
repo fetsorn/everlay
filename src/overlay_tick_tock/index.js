@@ -6,11 +6,9 @@ import { refresh } from "./lib.js";
 refresh(
   [
     SourceTime,
-    DeviceEvenOdd
-  ],
-  [
     ["now", "num"],
-    ["isEven", "trueFalse"]
+    DeviceEvenOdd,
+    ["isEven", "trueFalse"],
   ],
   OverlayTickTock
 )
