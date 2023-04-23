@@ -19,10 +19,14 @@ export async function Device(url, args) {
 export async function refresh(connections, overlay, connectChart) {
   // do magic with source and device
   const callbacks = await connections.reduce(
-    async (acc, connection) => {
+    async (acc, Connection) => {
       const chart = await acc;
 
-      return connectChart(chart, await connection(chart))
+      const connection = await Connection(chart);
+
+      const inputs = { ...connection, ...chart };
+
+      return connectChart(inputs)
     },
     Promise.resolve({})
   );
