@@ -2,7 +2,6 @@
 
 [[./assets/20230401-restaurants.jpg][Screenshot of simulation running in the logs]]
 
-
 * inspirations
 First in plain text metaphors in poems. A falling apple is a falling knowledge is a crushing meteorite is an elevator.
 
@@ -99,3 +98,33 @@ As long as overlay has identity, it enlightens.
 For example a specific time zone, or personal hours from birth, if they wrap around meaningful color codes, and one can compare to another - there's already competition and attention.
 To achieve gamification and respect, we also add player input.
 There is a lot of identities and behaviours in the wild web, and we intend to show them all.
+
+* architecture
+The source is a record of callback functions.
+The device is a wasm module that expects callbacks as "import objects" and exports some methods.
+The overlay is a function that expects a wasm instance exporting certain API, or a record of wasm instances, and outputs some view, for example raw html or a React component.
+So you can have several devices with the same API, you can instantiate devices with different source callbacks, and you can pass devices to different overlays.
+
+The source is a single function foo() that returns a number
+The device is a wasm module that exports one function bar() that calls foo and outputs "true" or "false" when the number is even or odd.
+The overlay is a function baz(wasm) that returns either text "tik" or text "tok" depending on if wasm.bar() returns true or false.
+
+The function signature of device methods is that of a computed variable, we don't want to pass any data to wasm.
+So overlay only calls wasm.bar(), without arguments, like a template that arranges computed variables in a particular way.
+Any user input is a source by nature and should be passed to SourceFactory on initialization.
+The application can position input and overlay side by side, can let user switch between sources, between devices, between overlays, can let user input data for sources
+But still any user input is a source, and any overlay is a read-only template.
+** case 1
+The source is a single function foo() that returns current unix time
+So the device will change between odd and even every second
+The application is a page that runs the overlay in a loop, and it will change between "tik" and "tock" every second.
+** case 2
+To add identification, instead of unix time we use local time zone in the source foo() implementation.
+** case 3
+To add user input, we let the user write their date of birth.
+We use a factory function for source, SourceFactory(birth) returns foo() implementation that counts from birth.
+** case 4
+Instead of even/odd bar(num) checks if some num is larger than current time. This again should be done through factory, as it relates to time.
+** case 5
+We allow user to move the mouse around the screen, pass pointer position to SourceFactory, transform that position into a midi number in the device and play the note in overlay.
+
