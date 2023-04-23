@@ -58,28 +58,11 @@ async function updateChart(chart, step) {
  * @param {Step[]} steps
  * @returns {Object} - Chart of connections
  */
-async function makeChart(steps) {
+export async function Chart(steps) {
   return steps.reduce(
     async (chartPromise, step) => {
       return updateChart(await chartPromise, step);
     },
     Promise.resolve({})
   );
-}
-
-/**
- * Renders overlay in a loop
- * @param {Step[]} steps
- * @param {Function} overlay
- * @returns {void}
- */
-export async function refresh(steps, overlay) {
-  // Connect sources, devices and overlays
-  const chart = await makeChart(steps);
-
-  // set page html to the overlay of device
-  document.getElementById("view").innerHTML = overlay(chart);
-
-  // frame rate 60fps
-  setTimeout(() => refresh(steps, overlay), 33.33);
 }

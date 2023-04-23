@@ -1,14 +1,32 @@
 import { SourceTime } from "./source_time.js";
 import { DeviceEvenOdd } from "./device_even_odd.js";
 import { OverlayTickTock } from "./overlay_tick_tock.js";
-import { refresh } from "./lib.js";
+import { Chart } from "./lib.js";
 
-refresh(
-  [
-    SourceTime,
-    ["now", "num"],
-    DeviceEvenOdd,
-    ["isEven", "trueFalse"],
-  ],
-  OverlayTickTock
-)
+const steps = [
+  SourceTime,
+  ["now", "num"],
+  DeviceEvenOdd,
+  ["isEven", "trueFalse"],
+];
+
+/**
+ * Renders overlay in a loop
+ * @param {Step[]} steps
+ * @param {Function} overlay
+ * @returns {void}
+ */
+export async function render() {
+  // Connect sources, devices and overlays
+  const chart = await Chart(steps);
+
+  const overlay = OverlayTickTock(chart)
+
+  // set page html to the overlay of device
+  document.getElementById("view").innerHTML = overlay;
+
+  // frame rate 60fps
+  setTimeout(() => render(), 33.33);
+}
+
+render()
