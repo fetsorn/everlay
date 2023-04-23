@@ -16,17 +16,25 @@ export async function Device(url, args) {
 /**
  * Renders overlay in a loop
  */
-export async function refresh(connections, overlay, connectChart) {
+export async function refresh(sourcesOrDevices, connections, overlay) {
   // do magic with source and device
-  const callbacks = await connections.reduce(
-    async (acc, Connection) => {
-      const chart = await acc;
+  const callbacks = await sourcesOrDevices.reduce(
+    async (chartPromise, SourceOrDevice) => {
+      const chartOld = await chartPromise;
 
-      const connection = await Connection(chart);
+      const sourceOrDevice = await SourceOrDevice(chartOld);
 
-      const inputs = { ...connection, ...chart };
+      const chartNew = { ...sourceOrDevice, ...chartOld };
 
-      return connectChart(inputs)
+      const chartConnected = connections.reduce(
+        (chart, [callback, key]) => ({
+          ...chart,
+          [key]: chart[callback]
+        }),
+        chartNew
+      );
+
+      return chartConnected
     },
     Promise.resolve({})
   );
@@ -35,5 +43,5 @@ export async function refresh(connections, overlay, connectChart) {
   document.getElementById("view").innerHTML = overlay(callbacks)
 
   // frame rate 60fps
-  setTimeout(() => refresh(connections, overlay, connectChart), 33.33);
+  setTimeout(() => refresh(sourcesOrDevices, connections, overlay), 33.33);
 }
