@@ -1,3 +1,5 @@
+import { AsyncWasmInstance } from "./asyncify.js";
+
 /**
  * Instantiates a wasm module with imported source API and exported methods
  * @param {string} url - Path to wasm module
@@ -5,12 +7,22 @@
  * @returns {Object} - Interface of the device
  */
 export async function Device(url, args) {
-  const wasm = await WebAssembly.instantiateStreaming(
-    fetch(url),
-    { deps: args, env: {} }
-  )
+  const module = await (await fetch(url)).arrayBuffer();
+  const memory = new WebAssembly.Memory({ initial: 1 });
 
-  return wasm.instance.exports;
+  const instance = await AsyncWasmInstance.createInstance({
+    module,
+    imports: {
+      deps: {
+        ...args,
+      },
+      env: {
+        memory
+      }
+    }
+  });
+
+  return instance._wrappedExports;
 }
 
 /**
@@ -47,7 +59,7 @@ async function updateChart(chart, step) {
 
     return {
       ...chart,
-      [key]: chart[callback]
+      [key]: chart[callback],
     }
   }
 }
@@ -63,6 +75,6 @@ export async function Chart(steps) {
     async (chartPromise, step) => {
       return updateChart(await chartPromise, step);
     },
-    Promise.resolve({})
+    Promise.resolve({log: console.log})
   );
 }

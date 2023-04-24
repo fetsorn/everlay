@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+as-bigint@^0.5.3:
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/as-bigint/-/as-bigint-0.5.3.tgz#a0647d0b7ce835077aca33115e71eb26a83df8be"
+  integrity sha512-tg9iTO/vPeovOM5CSk1WxYcsfBd/cd3twhBW5PrpcGUfiSEXlPB69eOxFKvSbZnpuDxBAyQ4YBgEkfnYL89Czw==
+
 assemblyscript@^0.27.2:
   version "0.27.2"
   resolved "https://registry.yarnpkg.com/assemblyscript/-/assemblyscript-0.27.2.tgz#cf723d1218fbe3f6b7801ac56e4197fb7d363489"

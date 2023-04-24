@@ -21,24 +21,38 @@
       let
         pkgs = import nixpkgs { inherit system; };
 
-        deviceEvenOdd = pkgs.mkYarnPackage rec {
-          src = ./src/device_even_odd;
+        mkServeScript = drv:
+          pkgs.writeShellScriptBin "serve"
+          "${pkgs.python3}/bin/python3 -m http.server --directory ${drv}";
 
-          name = (pkgs.lib.importJSON (src + "/package.json")).name;
+        deviceEvenOddDrv = async:
+          pkgs.mkYarnPackage rec {
+            src = ./src/device_even_odd;
 
-          version = (pkgs.lib.importJSON (src + "/package.json")).version;
+            name = (pkgs.lib.importJSON (src + "/package.json")).name;
 
-          buildPhase =
-            "yarn run asc assembly/index.ts --target release --outFile build/${name}.wasm";
+            version = (pkgs.lib.importJSON (src + "/package.json")).version;
 
-          installPhase = ''
-            mkdir $out
-            cp ./deps/${name}/build/${name}.wasm $out/
-            cp ./deps/${name}/build/${name}.wasm.map $out/
-          '';
+            buildPhase =
+              "yarn run asc assembly/index.ts --target release --outFile build/${name}.wasm"
+              + " --path ./node_modules --use abort=assembly/index/abort"
+              + (if async then
+                " --optimize --optimizeLevel 3 --shrinkLevel 2 --importMemory --runPasses asyncify"
+              else
+                "");
 
-          doDist = false;
-        };
+            installPhase = ''
+              mkdir $out
+              cp ./deps/${name}/build/${name}.wasm $out/
+              cp ./deps/${name}/build/${name}.wasm.map $out/
+            '';
+
+            doDist = false;
+          };
+
+        deviceEvenOdd = deviceEvenOddDrv false;
+
+        deviceEvenOddAsync = deviceEvenOddDrv true;
 
         overlayTickTock = pkgs.stdenv.mkDerivation {
           name = "overlayTickTock";
@@ -50,19 +64,43 @@
           installPhase = "mkdir $out; cp * $out";
         };
 
-        overlayTickTockScript =
-          pkgs.writeShellScriptBin "overlay_tick_tock_script"
-          "${pkgs.python3}/bin/python3 -m http.server --directory ${overlayTickTock}";
-      in rec {
-        packages = {
-          inherit deviceEvenOdd overlayTickTock overlayTickTockScript;
+        overlayTickTockScript = mkServeScript overlayTickTock;
+
+        overlayTickTockAsync = pkgs.stdenv.mkDerivation {
+          name = "overlayTickTock";
+
+          src = ./src/overlay_tick_tock_async;
+
+          buildPhase = "cp ${deviceEvenOddAsync}/* .";
+
+          installPhase = "mkdir $out; cp * $out";
         };
 
-        defaultPackage = packages.overlayTickTock;
+        overlayTickTockAsyncScript = mkServeScript overlayTickTockAsync;
+
+        overlayMarket = pkgs.stdenv.mkDerivation {
+          name = "overlayMarket";
+
+          src = ./src/overlay_market;
+
+          buildPhase = "cp ${deviceEvenOddAsync}/* .";
+
+          installPhase = "mkdir $out; cp -r * $out";
+        };
+
+        overlayMarketScript = mkServeScript overlayMarket;
+      in rec {
+        packages = {
+          inherit deviceEvenOdd deviceEvenOddAsync overlayTickTock
+            overlayTickTockScript overlayTickTockAsync
+            overlayTickTockAsyncScript overlayMarketScript;
+        };
+
+        defaultPackage = overlayMarket;
 
         defaultApp = {
           type = "app";
-          program = "${overlayTickTockScript}/bin/overlay_tick_tock_script";
+          program = "${overlayMarketScript}/bin/serve";
         };
 
         devShell =
