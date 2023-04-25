@@ -24,9 +24,7 @@ export async function render() {
 
   // set page html to the overlay of device
   document.getElementById("view").innerHTML = overlay;
-
-  // frame rate 60fps
-  setTimeout(() => render(), 33.33);
 }
 
-render();
+// frame rate 60fps
+setInterval(render, 33.33);

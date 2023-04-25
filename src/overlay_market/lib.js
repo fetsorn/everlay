@@ -75,6 +75,6 @@ export async function Chart(steps) {
     async (chartPromise, step) => {
       return updateChart(await chartPromise, step);
     },
-    Promise.resolve({log: console.log})
+    Promise.resolve({log: console.log, free: })
   );
 }
