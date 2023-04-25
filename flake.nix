@@ -21,86 +21,67 @@
       let
         pkgs = import nixpkgs { inherit system; };
 
-        mkServeScript = drv:
-          pkgs.writeShellScriptBin "serve"
-          "${pkgs.python3}/bin/python3 -m http.server --directory ${drv}";
+        deviceEvenOdd = pkgs.mkYarnPackage rec {
+          src = ./src/device_even_odd;
 
-        deviceEvenOddDrv = async:
-          pkgs.mkYarnPackage rec {
-            src = ./src/device_even_odd;
+          name = (pkgs.lib.importJSON (src + "/package.json")).name;
 
-            name = (pkgs.lib.importJSON (src + "/package.json")).name;
+          version = (pkgs.lib.importJSON (src + "/package.json")).version;
 
-            version = (pkgs.lib.importJSON (src + "/package.json")).version;
+          buildPhase = "yarn asbuild:release";
 
-            buildPhase =
-              "yarn run asc assembly/index.ts --target release --outFile build/${name}.wasm"
-              + " --path ./node_modules --use abort=assembly/index/abort"
-              + (if async then
-                " --optimize --optimizeLevel 3 --shrinkLevel 2 --importMemory --runPasses asyncify"
-              else
-                "");
+          installPhase = ''
+            mkdir $out
+            cp ./deps/${name}/build/release.wasm $out/
+            cp ./deps/${name}/build/release.wasm.map $out/
+          '';
 
-            installPhase = ''
-              mkdir $out
-              cp ./deps/${name}/build/${name}.wasm $out/
-              cp ./deps/${name}/build/${name}.wasm.map $out/
-            '';
+          doDist = false;
+        };
 
-            doDist = false;
-          };
+        deviceEvenOddAsync = pkgs.mkYarnPackage rec {
+          src = ./src/device_even_odd_async;
 
-        deviceEvenOdd = deviceEvenOddDrv false;
+          name = (pkgs.lib.importJSON (src + "/package.json")).name;
 
-        deviceEvenOddAsync = deviceEvenOddDrv true;
+          version = (pkgs.lib.importJSON (src + "/package.json")).version;
 
-        overlayTickTock = pkgs.stdenv.mkDerivation {
+          buildPhase = "yarn asbuild:release";
+
+          installPhase = ''
+            mkdir $out
+            cp ./deps/${name}/build/release.wasm $out/
+            cp ./deps/${name}/build/release.wasm.map $out/
+          '';
+
+          doDist = false;
+        };
+
+        app = pkgs.stdenv.mkDerivation {
           name = "overlayTickTock";
 
-          src = ./src/overlay_tick_tock;
+          src = ./src;
 
-          buildPhase = "cp ${deviceEvenOdd}/* .";
+          buildPhase = ''
+            mkdir -p device_even_odd/build
+            cp ${deviceEvenOddAsync}/* device_even_odd/build/
+            mkdir -p device_even_odd_async/build
+            cp ${deviceEvenOddAsync}/* device_even_odd_async/build/
+          '';
 
-          installPhase = "mkdir $out; cp * $out";
+          installPhase = "cp -r $PWD $out";
         };
 
-        overlayTickTockScript = mkServeScript overlayTickTock;
-
-        overlayTickTockAsync = pkgs.stdenv.mkDerivation {
-          name = "overlayTickTock";
-
-          src = ./src/overlay_tick_tock_async;
-
-          buildPhase = "cp ${deviceEvenOddAsync}/* .";
-
-          installPhase = "mkdir $out; cp * $out";
-        };
-
-        overlayTickTockAsyncScript = mkServeScript overlayTickTockAsync;
-
-        overlayMarket = pkgs.stdenv.mkDerivation {
-          name = "overlayMarket";
-
-          src = ./src/overlay_market;
-
-          buildPhase = "cp ${deviceEvenOddAsync}/* .";
-
-          installPhase = "mkdir $out; cp -r * $out";
-        };
-
-        overlayMarketScript = mkServeScript overlayMarket;
+        script = pkgs.writeShellScriptBin "serve"
+          "${pkgs.python3}/bin/python3 -m http.server --directory ${app}";
       in rec {
-        packages = {
-          inherit deviceEvenOdd deviceEvenOddAsync overlayTickTock
-            overlayTickTockScript overlayTickTockAsync
-            overlayTickTockAsyncScript overlayMarketScript;
-        };
+        packages = { inherit deviceEvenOdd deviceEvenOddAsync app script; };
 
-        defaultPackage = overlayMarket;
+        defaultPackage = app;
 
         defaultApp = {
           type = "app";
-          program = "${overlayMarketScript}/bin/serve";
+          program = "${script}/bin/serve";
         };
 
         devShell =

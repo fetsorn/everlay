@@ -1,3 +1,4 @@
+import * as asyncify from "bindings/asyncify";
 import { BigInt } from "as-bigint/assembly"
 import { num, log } from "./deps"
 
