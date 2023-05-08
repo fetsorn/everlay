@@ -242,7 +242,10 @@ export class AsyncWasmInstance {
 
     for (const exportName in exports) {
       let value = exports[exportName];
-      if (typeof value === "function" && !exportName.startsWith("asyncify_")) {
+      if (typeof value === "function"
+          && !exportName.startsWith("asyncify_")
+          && !exportName.startsWith("__")
+          && exportName !== "abort") {
         value = this._wrapExportFn(value);
       }
       Object.defineProperty(newExports, exportName, {

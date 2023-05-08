@@ -1,0 +1,30 @@
+{
+  "name": "device-even-odd",
+  "version": "1.0.0",
+  "description": "",
+  "main": "assembly/index.js",
+  "scripts": {
+    "test": "node tests",
+    "build:debug": "asc assembly/index.ts --use abort=assembly/index/abort --importMemory --runPasses asyncify",
+    "build:release": "asc assembly/index.ts --use abort=assembly/index/abort --optimize --optimizeLevel 3 --shrinkLevel 2 --importMemory --runPasses asyncify",
+    "build": "yarn run build:debug && yarn run build:release",
+    "start": "npx serve ."
+  },
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./build/release.js",
+      "types": "./build/release.d.ts"
+    }
+  },
+  "devDependencies": {
+    "assemblyscript": "^0.27.3"
+  },
+  "dependencies": {
+    "@fetsorn/as-msgpack": "^0.1.0",
+    "@fetsorn/as-bigint": "^0.6.0",
+    "@fetsorn/as-bignumber": "^0.3.1"
+  }
+}

@@ -1,11 +1,11 @@
-import { SourceMarket } from "./source_market/index.js";
+import { SourceMarket } from "./source_market_msgpack/index.js";
 import { OverlayTickTock } from "./overlay_tick_tock_async/index.js";
-import { DeviceAsync, Chart } from "./lib/index.js";
+import { DeviceMsgpack, Chart } from "./lib/index.js";
 
 const steps = [
   SourceMarket,
   ["now", "num"],
-  DeviceAsync("./device_even_odd_async/build/release.wasm"),
+  DeviceMsgpack("./device_even_odd_msgpack/build/release.wasm"),
   ["isEven", "trueFalse"],
 ];
 
