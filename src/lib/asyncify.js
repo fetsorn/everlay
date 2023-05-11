@@ -1,3 +1,4 @@
+import { WASI, File, OpenFile, PreopenDirectory } from 'https://cdn.jsdelivr.net/npm/@bjorn3/browser_wasi_shim@0.2.8/+esm'
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-empty-function */
@@ -131,8 +132,23 @@ export class AsyncWasmInstance {
 
   static async createInstance(config) {
     const instance = new AsyncWasmInstance();
+
+    // let args = ["bin", "arg1", "arg2"];
+    let env = ["FOO=bar"];
+    let fds = [
+      new OpenFile(new File([])), // stdin
+      new OpenFile(new File([])), // stdout
+      new OpenFile(new File([])), // stderr
+      new PreopenDirectory(".", {
+        "example.c": new File(new TextEncoder("utf-8").encode(`#include "a"`)),
+        "hello.rs": new File(new TextEncoder("utf-8").encode(`fn main() { println!("Hello World!"); }`)),
+      }),
+    ];
+    let wasi = new WASI(["bin", "arg1", "arg2"], env, fds);
+
+    const importsShim = {...config.imports, wasi_snapshot_preview1: wasi.wasiImport}
     // Wrap imports
-    instance._wrappedImports = instance._wrapImports(config.imports);
+    instance._wrappedImports = instance._wrapImports(importsShim);
 
     // Create Wasm module instance
     instance._instance = (
@@ -166,6 +182,9 @@ export class AsyncWasmInstance {
       AsyncWasmInstance._dataStart,
       AsyncWasmInstance._dataEnd,
     ]);
+
+    wasi.initialize(instance._instance)
+
     return instance;
   }
 
