@@ -1,4 +1,4 @@
-import { WASI, File, OpenFile, PreopenDirectory } from 'https://cdn.jsdelivr.net/npm/@bjorn3/browser_wasi_shim@0.2.8/+esm'
+import { WASI, File, OpenFile, PreopenDirectory } from 'https://cdn.jsdelivr.net/npm/@bjorn3/browser_wasi_shim@0.2.15/+esm'
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-empty-function */
@@ -183,7 +183,7 @@ export class AsyncWasmInstance {
       AsyncWasmInstance._dataEnd,
     ]);
 
-    wasi.initialize(instance._instance)
+    // wasi.initialize(instance._instance)
 
     return instance;
   }

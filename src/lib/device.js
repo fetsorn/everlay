@@ -9,9 +9,11 @@ import { LowpolyInstance } from "./lowpoly.js";
  */
 export function Device(url) {
   return async (args) => {
+    const memory = new WebAssembly.Memory({ initial: 1 });
+
     const wasm = await WebAssembly.instantiateStreaming(
       fetch(url),
-      { deps: args, env: {} }
+      { deps: args, env: { memory } }
     )
 
     return wasm.instance.exports;
@@ -27,6 +29,7 @@ export function Device(url) {
 export function DeviceAsync(url) {
   return async (args) => {
     const module = await (await fetch(url)).arrayBuffer();
+
     const memory = new WebAssembly.Memory({ initial: 1 });
 
     const instance = await AsyncWasmInstance.createInstance({

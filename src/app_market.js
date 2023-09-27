@@ -25,5 +25,6 @@ async function render() {
   document.getElementById("view").innerHTML = overlay;
 }
 
-// 1 frame per second to avoid rate limit in source
-setInterval(render, 1000);
+// 1 frame per 10 seconds to avoid rate limit in source
+render()
+setInterval(render, 10000);
