@@ -2,3 +2,6 @@
 result
 /node_modules/
 *.wasm
+*.hi
+*.o
+/src/device_haskell/hello_stub.h

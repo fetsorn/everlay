@@ -1,0 +1,19 @@
+#+title: Readme
+
+#+begin_src sh
+nix shell git+https://gitlab.haskell.org/ghc/ghc-wasm-meta
+
+wasm32-wasi-ghc hello.hs -o hello.wasm -no-hs-main -optl-mexec-model=reactor -optl-Wl,--export=hs_init,--export=isEven
+#+end_src
+
+to add imports use a C++ shim
+#+begin_src sh
+wasm32-wasi-ghc hello.hs shim.c -o hello.wasm -no-hs-main -optl-mexec-model=reactor -optl-Wl,--export=hs_init,--export=isEven
+#+end_src
+
+there's some commented code to add a malloc shim and _new export.
+
+to add asyncify, postprocess wasm file. takes a long time, add --debug flag to confirm progress
+#+begin_src sh
+wasm-opt hello.wasm -o helloAsync.wasm -O1 --asyncify
+#+end_src
