@@ -1,11 +1,11 @@
 import { SourceMarket } from "./source_market_msgpack/index.js";
 import { OverlayTickTock } from "./overlay_tick_tock_async/index.js";
-import { DeviceMsgpack, Chart } from "./lib/index.js";
+import { Device, Chart } from "./lib/index.js";
 
 const steps = [
   SourceMarket,
   ["now", "num"],
-  DeviceMsgpack("./device_hello/hello.wasm"),
+  Device("./device_hello/hello.wasm"),
   ["fib", "trueFalse"],
 ];
 

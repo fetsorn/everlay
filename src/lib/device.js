@@ -1,5 +1,5 @@
 import { AsyncWasmInstance } from "./asyncify.js";
-import { LowpolyInstance } from "./lowpoly.js";
+import { MsgpackWasmInstance } from "./msgpackify.js";
 
 /**
  * Instantiates a wasm module with imported source API and exported methods
@@ -9,11 +9,18 @@ import { LowpolyInstance } from "./lowpoly.js";
  */
 export function Device(url) {
   return async (args) => {
+    const module = fetch(url)
+
     const memory = new WebAssembly.Memory({ initial: 1 });
 
     const wasm = await WebAssembly.instantiateStreaming(
-      fetch(url),
-      { deps: args, env: { memory } }
+      module,
+      {
+        deps: args,
+        env: {
+          memory
+        }
+      }
     )
 
     return wasm.instance.exports;
@@ -30,7 +37,9 @@ export function DeviceAsync(url) {
   return async (args) => {
     const module = await (await fetch(url)).arrayBuffer();
 
-    const memory = new WebAssembly.Memory({ initial: 1 });
+    // const memory = new WebAssembly.Memory({ initial: 1 });
+    // TODO not tested
+    const memory = AsyncWasmInstance.createMemory({ module });
 
     const instance = await AsyncWasmInstance.createInstance({
       module,
@@ -55,9 +64,10 @@ export function DeviceAsync(url) {
 export function DeviceMsgpack(url) {
   return async (args) => {
     const module = await (await fetch(url)).arrayBuffer();
+
     const memory = new WebAssembly.Memory({ initial: 1 });
 
-    const instance = await LowpolyInstance.createInstance({
+    const instance = await MsgpackWasmInstance.createInstance({
       module,
       imports: {
         deps: args,

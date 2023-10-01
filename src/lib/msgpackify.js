@@ -58,7 +58,7 @@ function msgpackifyExports(exports) {
   return exportsNew
 }
 
-export class LowpolyInstance {
+export class MsgpackWasmInstance {
   constructor() {}
 
   static async createInstance(config) {
