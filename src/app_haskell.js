@@ -1,11 +1,11 @@
-import { SourceMarket } from "./source_market_msgpack/index.js";
+import { SourceTime } from "./source_time/index.js";
 import { OverlayTickTock } from "./overlay_tick_tock_async/index.js";
 import { DeviceWASI, Chart } from "./lib/index.js";
 
 const steps = [
-  SourceMarket,
+  SourceTime,
   ["now", "num"],
-  DeviceWASI("./device_haskell/hello.wasm"),
+  DeviceWASI("./device_haskell/isEven.wasm"),
   ["isEven", "trueFalse"],
 ];
 

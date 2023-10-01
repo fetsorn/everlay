@@ -4,4 +4,4 @@ result
 *.wasm
 *.hi
 *.o
-/src/device_haskell/hello_stub.h
+/src/device_haskell/*stub.h
